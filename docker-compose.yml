@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  jaqpot-mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - JAQPOT_API_KEY=${JAQPOT_API_KEY}
+      - JAQPOT_API_SECRET=${JAQPOT_API_SECRET}
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s

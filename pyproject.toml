@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "jaqpot-mcp-server"
+version = "0.1.0"
+description = "MCP server for Jaqpot platform integration"
+authors = [
+    {name = "Jaqpot Team", email = "info@jaqpot.org"}
+]
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.8"
+dependencies = [
+    "fastmcp>=2.0.0",
+    "jaqpot-python-sdk>=0.1.0",
+    "jaqpot-api-client>=6.49.1",
+    "pydantic>=2.0.0",
+    "uvicorn>=0.20.0",
+    "fastapi>=0.100.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ntua-unit-of-control-and-informatics/jaqpot-mcp-server"
+Repository = "https://github.com/ntua-unit-of-control-and-informatics/jaqpot-mcp-server"
+Documentation = "https://docs.jaqpot.org"
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
