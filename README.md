@@ -40,15 +40,6 @@ uv sync
 
 ## Configuration
 
-### Environment Variables
-
-Set your Jaqpot API credentials:
-
-```bash
-export JAQPOT_API_KEY="your-api-key"
-export JAQPOT_API_SECRET="your-api-secret"
-```
-
 ### MCP Client Configuration
 
 Add the server to your MCP client configuration. For Claude Desktop, add to your `claude_desktop_config.json`:
