@@ -74,13 +74,11 @@ def jaqpot_search_models(
         Search results as a string
     """
     try:
-        response = jaqpot_client.search_models(
+        models = jaqpot_client.search_models(
             query=query,
             page=page,
             size=size,
         )
-        
-        models = response.data.to_dict() if hasattr(response.data, 'to_dict') else response.data
         return f"Found models:\\n{models}"
     except JaqpotApiException as e:
         return f"Search failed: {str(e)}"
@@ -128,23 +126,10 @@ def jaqpot_get_model_summary(model_id: int) -> str:
     try:
         logger.info(f"Getting model summary for model {model_id}")
         summary = jaqpot_client.get_model_summary(model_id)
-        logger.info(f"Summary type: {type(summary)}, Summary: {summary}")
+        logger.info(f"Summary type: {type(summary)}")
+        logger.info(f"Summary content: {summary}")
         
-        # Handle the response properly - more robust handling
-        if hasattr(summary, 'to_dict'):
-            try:
-                summary_data = summary.to_dict()
-            except Exception as dict_error:
-                logger.warning(f"Failed to convert to dict: {dict_error}")
-                summary_data = str(summary)
-        elif isinstance(summary, dict):
-            summary_data = summary
-        elif hasattr(summary, '__dict__'):
-            summary_data = summary.__dict__
-        else:
-            summary_data = str(summary)
-        
-        return f"Model {model_id} summary:\\n{summary_data}"
+        return f"Model {model_id} summary:\\n{summary}"
     except JaqpotApiException as e:
         logger.error(f"JaqpotApiException in get_model_summary: {str(e)}")
         return f"Failed to get model summary: {str(e)}"
