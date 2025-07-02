@@ -7,72 +7,110 @@ Model Context Protocol (MCP) server for Jaqpot platform integration. This server
 - **Model Predictions**: Execute predictions using Jaqpot models with the jaqpot-python-sdk
 - **Model Search**: Search and discover models by description and features
 - **Authentication**: Secure API access using client key and secret
-- **Docker Support**: Containerized deployment ready for Kubernetes
+- **MCP Integration**: Full Model Context Protocol compliance for seamless LLM integration
 
-## Installation & Setup
+## Installation
 
-### Option 1: Using Docker Hub (Recommended)
+### Prerequisites
 
-Pull the pre-built image:
+1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/):
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+
+2. Install Python 3.10+ using uv:
+   ```bash
+   uv python install 3.10
+   ```
+
+3. Configure your Jaqpot API credentials:
+   - Get your API key and secret from [Jaqpot platform](https://app.jaqpot.org)
+   - Set them as environment variables (see Configuration section)
+
+### Install the Server
 
 ```bash
-docker pull upcintua/jaqpot-mcp-server:latest
-```
-
-### Option 2: Build Locally
-
-```bash
+# Clone the repository
 git clone https://github.com/ntua-unit-of-control-and-informatics/jaqpot-mcp-server.git
 cd jaqpot-mcp-server
-docker build -t jaqpot-mcp-server .
+
+# Install with uv
+uv sync
 ```
 
-## Usage
+## Configuration
 
-### Configuring with Claude Desktop
+### Environment Variables
 
-Add to your Claude Desktop configuration (`claude_desktop_config.json`):
+Set your Jaqpot API credentials:
+
+```bash
+export JAQPOT_API_KEY="your-api-key"
+export JAQPOT_API_SECRET="your-api-secret"
+```
+
+### MCP Client Configuration
+
+Add the server to your MCP client configuration. For Claude Desktop, add to your `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "jaqpot": {
-      "command": "docker",
+      "type": "stdio",
+      "command": "uv",
       "args": [
-        "run", "--rm", "-i",
-        "-e", "JAQPOT_API_KEY=your-api-key",
-        "-e", "JAQPOT_API_SECRET=your-api-secret",
-        "upcintua/jaqpot-mcp-server:latest"
-      ]
+        "--directory", "/path/to/jaqpot-mcp-server",
+        "run", "server.py"
+      ],
+      "env": {
+        "JAQPOT_API_KEY": "your-api-key",
+        "JAQPOT_API_SECRET": "your-api-secret"
+      }
     }
   }
 }
 ```
 
-### Running Standalone
+Replace `/path/to/jaqpot-mcp-server` with the actual path to your cloned repository.
 
-```bash
-docker run --rm -i \
-  -e JAQPOT_API_KEY="your-api-key" \
-  -e JAQPOT_API_SECRET="your-api-secret" \
-  upcintua/jaqpot-mcp-server:latest
+### Alternative: Direct Python Execution
+
+```json
+{
+  "mcpServers": {
+    "jaqpot": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["/path/to/jaqpot-mcp-server/server.py"],
+      "env": {
+        "JAQPOT_API_KEY": "your-api-key",
+        "JAQPOT_API_SECRET": "your-api-secret"
+      }
+    }
+  }
+}
 ```
 
-### Local Development Setup
+## Usage
+
+### Running the Server
 
 ```bash
-git clone https://github.com/ntua-unit-of-control-and-informatics/jaqpot-mcp-server.git
-cd jaqpot-mcp-server
-export JAQPOT_API_KEY="your-api-key"
-export JAQPOT_API_SECRET="your-api-secret"
-pip install -r requirements.txt
+# With uv (recommended)
+uv run server.py
+
+# Or directly with Python
 python server.py
 ```
 
-### Environment Variables
+### Testing the Installation
 
-- `JAQPOT_API_KEY` (required): Your Jaqpot API key
-- `JAQPOT_API_SECRET` (required): Your Jaqpot API secret
+Run the example usage script:
+
+```bash
+uv run python examples/usage_example.py
+```
 
 ## MCP Tools Available
 
@@ -101,34 +139,31 @@ Get detailed information about a specific model.
 
 ### Local Development
 
-1. Clone the repository:
+1. Clone the repository and install dependencies:
 ```bash
 git clone https://github.com/ntua-unit-of-control-and-informatics/jaqpot-mcp-server.git
 cd jaqpot-mcp-server
+uv sync --dev
 ```
 
-2. Install dependencies:
+2. Set environment variables:
 ```bash
-pip install -r requirements.txt
+export JAQPOT_API_KEY="your-api-key"
+export JAQPOT_API_SECRET="your-api-secret"
 ```
 
-3. Set environment variables:
+3. Run the server:
 ```bash
-export JAQPOT_API_KEY="your-client-key"
-export JAQPOT_API_SECRET="your-secret-key"
-```
-
-4. Run the server:
-```bash
-python server.py
+uv run server.py
 ```
 
 ### Testing
 
 Run the example usage:
 ```bash
-python examples/usage_example.py
+uv run python examples/usage_example.py
 ```
+
 
 ## License
 

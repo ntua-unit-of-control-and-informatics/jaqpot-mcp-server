@@ -2,7 +2,7 @@
 
 import os
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from jaqpot_python_sdk.exceptions.exceptions import (
     JaqpotPredictionFailureException,
@@ -146,7 +146,7 @@ def jaqpot_get_model_summary(model_id: int) -> str:
 
 def main():
     """Main entry point for the MCP server."""
-    mcp.run()
+    mcp.run(transport="stdio")
 
 
 if __name__ == "__main__":

@@ -10,8 +10,8 @@ The Jaqpot MCP Server is a Model Context Protocol (MCP) server that enables Larg
 
 ### Core Components
 
-1. **MCP Server** (`src/jaqpot_mcp_server/server.py`)
-   - Main server implementation using the MCP protocol
+1. **MCP Server** (`server.py`)
+   - Main server implementation using FastMCP framework
    - Handles tool registration and execution
    - Manages authentication with Jaqpot API
    - Provides error handling and logging
@@ -31,15 +31,10 @@ The Jaqpot MCP Server is a Model Context Protocol (MCP) server that enables Larg
 ## Key Files and Their Purpose
 
 ### Source Code
-- `src/jaqpot_mcp_server/__init__.py` - Package initialization
-- `src/jaqpot_mcp_server/__main__.py` - Module entry point
-- `src/jaqpot_mcp_server/server.py` - Main MCP server implementation
+- `server.py` - Main MCP server implementation
 
 ### Configuration
 - `pyproject.toml` - Python project configuration and dependencies
-- `requirements.txt` - Python dependencies for Docker
-- `docker-compose.yml` - Docker composition for easy deployment
-- `Dockerfile` - Container configuration
 
 ### Documentation
 - `README.md` - User-facing documentation
@@ -50,11 +45,8 @@ The Jaqpot MCP Server is a Model Context Protocol (MCP) server that enables Larg
 ## Dependencies
 
 ### Core Dependencies
-- `mcp>=1.0.0` - Model Context Protocol framework
+- `fastmcp` - FastMCP framework for MCP server implementation
 - `jaqpot-python-sdk>=0.1.0` - Jaqpot platform integration
-- `pydantic>=2.0.0` - Data validation and settings management
-- `uvicorn>=0.20.0` - ASGI server (optional, for HTTP deployment)
-- `fastapi>=0.100.0` - Web framework (optional, for HTTP endpoints)
 
 ### Development Dependencies
 - `pytest>=7.0.0` - Testing framework
@@ -68,10 +60,6 @@ The Jaqpot MCP Server is a Model Context Protocol (MCP) server that enables Larg
 Required for operation:
 - `JAQPOT_API_KEY` - Jaqpot client API key
 - `JAQPOT_API_SECRET` - Jaqpot API secret
-
-Optional:
-- `PYTHONPATH` - Set to `/app/src` in containerized environments
-- `PYTHONUNBUFFERED=1` - For better logging in containers
 
 ## API Integration
 
@@ -215,10 +203,10 @@ Potential areas for improvement:
 
 ```bash
 # Install dependencies
-pip install -r requirements.txt
+uv sync
 
 # Run the server
-python -m jaqpot_mcp_server
+python server.py
 
 # Run example client
 python examples/usage_example.py
@@ -227,15 +215,9 @@ python examples/usage_example.py
 pytest
 
 # Format code
-black src/ examples/
-isort src/ examples/
+black server.py examples/
+isort server.py examples/
 
 # Type checking
-mypy src/
-
-# Build Docker image
-docker build -t jaqpot-mcp-server .
-
-# Run with Docker Compose
-docker-compose up
+mypy server.py
 ```
