@@ -9,8 +9,8 @@ from jaqpot_python_sdk.exceptions.exceptions import (
     JaqpotPredictionTimeoutException,
     JaqpotApiException,
 )
-from jaqpot_api_client import JaqpotApiClient
 from fastmcp import FastMCP
+from jaqpot_python_sdk.jaqpot_api_client import JaqpotApiClient
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -59,25 +59,25 @@ def jaqpot_predict(model_id: int, dataset: List[Dict[str, Any]]) -> str:
 
 @mcp.tool
 def jaqpot_search_models(
+    query: str,
     page: int = 0, 
     size: int = 20, 
-    organization_id: Optional[int] = None
 ) -> str:
     """Search for Jaqpot models by criteria.
     
     Args:
+        query: Query to search for models
         page: Page number for pagination (default: 0)
         size: Number of results per page (default: 20)
-        organization_id: Organization ID to filter models (optional)
-        
+
     Returns:
         Search results as a string
     """
     try:
-        response = jaqpot_client.get_shared_models(
+        response = jaqpot_client.search_models(
+            query=query,
             page=page,
             size=size,
-            organization_id=organization_id
         )
         
         models = response.data.to_dict() if hasattr(response.data, 'to_dict') else response.data
