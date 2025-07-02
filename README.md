@@ -9,24 +9,70 @@ Model Context Protocol (MCP) server for Jaqpot platform integration. This server
 - **Authentication**: Secure API access using client key and secret
 - **Docker Support**: Containerized deployment ready for Kubernetes
 
-## Quick Start
+## Installation & Setup
+
+### Option 1: Using Docker Hub (Recommended)
+
+Pull the pre-built image:
+
+```bash
+docker pull upcintua/jaqpot-mcp-server:latest
+```
+
+### Option 2: Build Locally
+
+```bash
+git clone https://github.com/ntua-unit-of-control-and-informatics/jaqpot-mcp-server.git
+cd jaqpot-mcp-server
+docker build -t jaqpot-mcp-server .
+```
+
+## Usage
+
+### Configuring with Claude Desktop
+
+Add to your Claude Desktop configuration (`claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "jaqpot": {
+      "command": "docker",
+      "args": [
+        "run", "--rm", "-i",
+        "-e", "JAQPOT_API_KEY=your-api-key",
+        "-e", "JAQPOT_API_SECRET=your-api-secret",
+        "upcintua/jaqpot-mcp-server:latest"
+      ]
+    }
+  }
+}
+```
+
+### Running Standalone
+
+```bash
+docker run --rm -i \
+  -e JAQPOT_API_KEY="your-api-key" \
+  -e JAQPOT_API_SECRET="your-api-secret" \
+  upcintua/jaqpot-mcp-server:latest
+```
+
+### Local Development Setup
+
+```bash
+git clone https://github.com/ntua-unit-of-control-and-informatics/jaqpot-mcp-server.git
+cd jaqpot-mcp-server
+export JAQPOT_API_KEY="your-api-key"
+export JAQPOT_API_SECRET="your-api-secret"
+pip install -r requirements.txt
+python server.py
+```
 
 ### Environment Variables
 
-```bash
-export JAQPOT_API_KEY="your-client-key"
-export JAQPOT_API_SECRET="your-secret-key"
-```
-
-### Running with Docker
-
-```bash
-docker build -t jaqpot-mcp-server .
-docker run -p 8000:8000 \
-  -e JAQPOT_API_KEY="your-client-key" \
-  -e JAQPOT_API_SECRET="your-secret-key" \
-  jaqpot-mcp-server
-```
+- `JAQPOT_API_KEY` (required): Your Jaqpot API key
+- `JAQPOT_API_SECRET` (required): Your Jaqpot API secret
 
 ## MCP Tools Available
 
@@ -74,7 +120,7 @@ export JAQPOT_API_SECRET="your-secret-key"
 
 4. Run the server:
 ```bash
-python -m jaqpot_mcp_server
+python server.py
 ```
 
 ### Testing
