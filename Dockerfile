@@ -16,7 +16,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy source code
-COPY src/ ./src/
+COPY server.py .
 COPY pyproject.toml .
 COPY README.md .
 
@@ -31,8 +31,7 @@ USER jaqpot
 EXPOSE 8000
 
 # Set environment variables
-ENV PYTHONPATH="/app/src"
 ENV PYTHONUNBUFFERED=1
 
 # Default command to run the MCP server
-CMD ["python", "-m", "jaqpot_mcp_server.server"]
+CMD ["python", "server.py"]
