@@ -126,12 +126,36 @@ def jaqpot_get_model_summary(model_id: int) -> str:
         return "Error: model_id is required"
     
     try:
+        logger.info(f"Getting model summary for model {model_id}")
         summary = jaqpot_client.get_model_summary(model_id)
-        return f"Model {model_id} summary:\\n{summary}"
+        logger.info(f"Summary type: {type(summary)}, Summary: {summary}")
+        
+        # Handle the response properly - more robust handling
+        if hasattr(summary, 'to_dict'):
+            try:
+                summary_data = summary.to_dict()
+            except Exception as dict_error:
+                logger.warning(f"Failed to convert to dict: {dict_error}")
+                summary_data = str(summary)
+        elif isinstance(summary, dict):
+            summary_data = summary
+        elif hasattr(summary, '__dict__'):
+            summary_data = summary.__dict__
+        else:
+            summary_data = str(summary)
+        
+        return f"Model {model_id} summary:\\n{summary_data}"
     except JaqpotApiException as e:
+        logger.error(f"JaqpotApiException in get_model_summary: {str(e)}")
         return f"Failed to get model summary: {str(e)}"
+    except AttributeError as e:
+        logger.error(f"AttributeError in get_model_summary: {str(e)}")
+        return f"API response format error: {str(e)}"
     except Exception as e:
         logger.error(f"Unexpected error in jaqpot_get_model_summary: {str(e)}")
+        logger.error(f"Error type: {type(e)}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return f"Unexpected error: {str(e)}"
 
 

@@ -11,7 +11,7 @@ authors = [
 ]
 readme = "README.md"
 license = {file = "LICENSE"}
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [
     "fastmcp>=2.0.0",
     "jaqpot-python-sdk>=0.1.0",
@@ -30,6 +30,9 @@ dev = [
     "mypy>=1.0.0",
 ]
 
+[project.scripts]
+jaqpot-mcp-server = "server:main"
+
 [project.urls]
 Homepage = "https://github.com/ntua-unit-of-control-and-informatics/jaqpot-mcp-server"
 Repository = "https://github.com/ntua-unit-of-control-and-informatics/jaqpot-mcp-server"
@@ -42,6 +45,9 @@ target-version = ['py38']
 [tool.isort]
 profile = "black"
 line_length = 88
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
 
 [tool.mypy]
 python_version = "3.8"

@@ -1,5 +1,5 @@
 fastmcp>=2.0.0
-jaqpot-python-sdk>=6.2.0
+jaqpot-python-sdk>=6.2.1
 jaqpot-api-client>=6.49.1
 pydantic>=2.0.0
 uvicorn>=0.20.0
